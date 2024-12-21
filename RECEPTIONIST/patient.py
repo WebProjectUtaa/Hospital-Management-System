@@ -16,16 +16,12 @@ DB_CONFIG = {
 
 # Function to hash passwords
 def hash_password(password):
-    """
-    Hashes a password using SHA-256.
-    """
+
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Function to establish a database connection
 async def get_db_connection():
-    """
-    Establishes a connection to the database.
-    """
+
     return await aiomysql.connect(
         host=DB_CONFIG["host"],
         port=DB_CONFIG["port"],
@@ -37,9 +33,7 @@ async def get_db_connection():
 # Register patients
 @app.post("/register")
 async def register_patients(request):
-    """
-    Endpoint to register a new patient.
-    """
+
     data = request.json
     required_fields = [
         "patient_name", "patient_surname", "patient_age", "patient_blood_group",
@@ -91,9 +85,7 @@ async def register_patients(request):
 # Update patient details
 @app.route("/update/<patient_id:int>", methods=["PUT"])
 async def update_patient(request, patient_id):
-    """
-    Endpoint to update patient details.
-    """
+
     data = request.json
 
     try:
@@ -119,9 +111,7 @@ async def update_patient(request, patient_id):
 # Delete a patient
 @app.route("/delete/<patient_id:int>", methods=["DELETE"])
 async def delete_patient(request, patient_id):
-    """
-    Endpoint to delete a patient by ID.
-    """
+
     try:
         conn = await get_db_connection()
         async with conn.cursor() as cur:
@@ -143,9 +133,7 @@ async def delete_patient(request, patient_id):
 # View all patients
 @app.route("/viewpatients")
 async def view_patients(request):
-    """
-    Endpoint to retrieve all patients from the database.
-    """
+
     conn = await get_db_connection()
     async with conn.cursor() as cur:
         # Query to fetch all patients
@@ -163,12 +151,10 @@ async def view_patients(request):
     conn.close()
     return json(result)
 
-# Test route
+# use this with postman to see if server is on
 @app.get("/test")
 async def test_route(request):
-    """
-    Test route to check server status.
-    """
+
     return json({"message": "Server is running!"})
 
 # Run the application
